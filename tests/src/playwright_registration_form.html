@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playwright Practice - Registration Form</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fa;color:#202938;font-family:Arial,sans-serif}
+header{background:#173b63;color:white;padding:22px max(24px,calc((100% - 960px)/2))}
+nav{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}nav a{color:#dcecff}
+main{max-width:960px;margin:28px auto;padding:0 18px}.intro,form{background:white;border-radius:12px;padding:24px;box-shadow:0 3px 14px #14243a12}
+.intro{display:flex;gap:20px;align-items:center;margin-bottom:20px}.intro img{width:96px;height:96px;object-fit:cover;border-radius:10px}
+h1{margin:0 0 8px}h2{color:#173b63}h3{color:#244d76;border-bottom:1px solid #e4eaf1;padding-bottom:8px;margin-top:26px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px}.field{display:flex;flex-direction:column;gap:7px}.full{grid-column:1/-1}
+label,legend{font-size:14px;font-weight:600}input,select,textarea{width:100%;padding:11px;border:1px solid #bdc9d6;border-radius:7px;font:inherit;background:white}
+input:focus,select:focus,textarea:focus{outline:3px solid #b9dcff;border-color:#2776bd}textarea{min-height:90px}
+fieldset{border:1px solid #d7e0e9;border-radius:8px;padding:14px;margin:0}.choices{display:flex;flex-wrap:wrap;gap:16px;margin-top:10px}
+.choices label,.checkline{display:inline-flex;align-items:center;gap:8px;font-weight:400}.choices input,.checkline input{width:auto}
+.hint{font-size:12px;color:#66768a}.actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:24px}
+button{border:0;border-radius:7px;padding:11px 17px;cursor:pointer;font-weight:700}.primary{background:#1769aa;color:white;font-size:16px;padding:14px 24px}.secondary{background:#e8f1fa;color:#17466f}
+#status{color:#17623b;font-weight:600}dialog{border:0;border-radius:12px;padding:26px;max-width:440px;width:calc(100% - 32px);box-shadow:0 10px 45px #0004}dialog::backdrop{background:#0b1d30aa}
+.dialog-actions{display:flex;justify-content:flex-end;margin-top:20px}footer{text-align:center;color:#68798b;padding:28px;font-size:13px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.intro{align-items:flex-start}}
+</style>
+</head>
+<body>
+<header><strong>QA Practice Portal</strong>
+<nav aria-label="Main navigation">
+<a href="#registration">Registration</a><a href="#preferences">Preferences</a><a href="#help" id="helpLink">Help</a>
+<a href="https://playwright.dev/" target="_blank" rel="noopener">Playwright documentation</a>
+</nav></header>
+<main>
+<section class="intro" aria-labelledby="page-title">
+<img src="https://placehold.co/200x200/dae8f5/173b63?text=QA" alt="QA practice illustration">
+<div><h1 id="page-title">Create your account</h1><p>Complete the registration form. Fields marked with * are required. This page is designed for Playwright locator and interaction practice.</p></div>
+</section>
+<form id="registrationForm">
+<section id="registration" aria-labelledby="personal-heading"><h2 id="personal-heading">Registration details</h2><h3>Personal information</h3>
+<div class="grid">
+<div class="field"><label for="firstName">First name *</label><input id="firstName" name="firstName" placeholder="e.g. Alex" autocomplete="given-name" required></div>
+<div class="field"><label for="lastName">Last name *</label><input id="lastName" name="lastName" placeholder="e.g. Morgan" autocomplete="family-name" required></div>
+<div class="field"><label for="email">Email address *</label><input id="email" name="email" type="email" placeholder="alex@example.com" autocomplete="email" required></div>
+<div class="field"><label for="confirmEmail">Confirm email address *</label><input id="confirmEmail" name="confirmEmail" type="email" placeholder="Re-enter your email" required></div>
+<div class="field"><label for="password">Password *</label><input id="password" name="password" type="password" placeholder="At least 8 characters" minlength="8" required></div>
+<div class="field"><label for="phone">Phone number</label><input id="phone" name="phone" type="tel" placeholder="+1 555 123 4567" autocomplete="tel"></div>
+<div class="field"><label for="birthday">Date of birth *</label><input id="birthday" name="birthday" type="date" required><span class="hint">Use the browser's date picker/calendar.</span></div>
+<div class="field"><label for="country">Country *</label><select id="country" name="country" required>
+<option value="">Select a country</option><option value="israel">Israel</option><option value="usa">United States</option><option value="uk">United Kingdom</option><option value="canada">Canada</option><option value="germany">Germany</option><option value="romania">Romania</option><option value="other">Other</option></select></div>
+<div class="field"><label for="city">City</label><input id="city" name="city" placeholder="Enter your city"></div>
+<div class="field"><label for="website">Personal website</label><input id="website" name="website" type="url" placeholder="https://example.com"></div>
+</div>
+<h3>About you</h3><div class="grid">
+<fieldset class="field"><legend>Gender</legend><div class="choices">
+<label><input type="radio" name="gender" value="female"> Female</label><label><input type="radio" name="gender" value="male"> Male</label><label><input type="radio" name="gender" value="other"> Other</label><label><input type="radio" name="gender" value="prefer-not-to-say"> Prefer not to say</label>
+</div></fieldset>
+<div class="field"><label for="occupation">Occupation</label><select id="occupation" name="occupation"><option value="">Choose an occupation</option><option value="qa">QA Engineer</option><option value="developer">Software Developer</option><option value="student">Student</option><option value="other">Other</option></select></div>
+<div class="field full"><label for="bio">Short introduction</label><textarea id="bio" name="bio" placeholder="Tell us a little about yourself..."></textarea></div>
+</div></section>
+<section id="preferences"><h3>Preferences</h3><div class="grid">
+<div class="field"><label for="experience">Years of experience</label><select id="experience" name="experience"><option value="">Select experience</option><option value="0">Less than 1 year</option><option value="1-2">1–2 years</option><option value="3-5">3–5 years</option><option value="6+">6+ years</option></select></div>
+<div class="field"><label for="favoriteBrowser">Favorite browser</label><select id="favoriteBrowser" name="favoriteBrowser"><option value="">Select a browser</option><option value="chromium">Chromium</option><option value="firefox">Firefox</option><option value="webkit">WebKit</option></select></div>
+<fieldset class="field full"><legend>Which topics interest you?</legend><div class="choices">
+<label><input type="checkbox" name="topics" value="manual"> Manual QA</label><label><input type="checkbox" name="topics" value="automation"> Test automation</label><label><input type="checkbox" name="topics" value="api"> API testing</label><label><input type="checkbox" name="topics" value="mobile"> Mobile testing</label><label><input type="checkbox" name="topics" value="performance"> Performance testing</label>
+</div></fieldset>
+<fieldset class="field full"><legend>Preferred contact method</legend><div class="choices">
+<label><input type="radio" name="contactMethod" value="email"> Email</label><label><input type="radio" name="contactMethod" value="phone"> Phone</label><label><input type="radio" name="contactMethod" value="none"> Do not contact me</label>
+</div></fieldset>
+<div class="field full"><label class="checkline"><input id="newsletter" name="newsletter" type="checkbox"> Subscribe to the monthly QA newsletter</label>
+<label class="checkline"><input id="terms" name="terms" type="checkbox" required> I agree to the terms and conditions *</label></div>
+</div></section>
+<div class="actions">
+<button class="primary" type="submit">Submit registration</button>
+<button class="secondary" type="reset">Reset form</button>
+<span id="status" role="status" aria-live="polite"></span>
+</div>
+<p id="validationMessage" role="alert" aria-live="assertive" style="color:#b42318;font-weight:600;margin-top:12px" hidden></p>
+</form></main>
+<dialog id="confirmationDialog" aria-labelledby="dialog-title"><h2 id="dialog-title">Registration submitted!</h2><p id="dialogMessage"></p><p class="hint">Training demo only: no email has been sent.</p><div class="dialog-actions"><button type="button" class="primary" id="closeDialog">Close</button></div></dialog>
+<dialog id="helpDialog" aria-labelledby="help-title"><h2 id="help-title">Form help</h2><p>Complete all required fields, choose a date of birth, select your preferences, and submit the form.</p><div class="dialog-actions"><button type="button" class="primary" id="closeHelp">Got it</button></div></dialog>
+<footer>Playwright selector practice page · Demo data only</footer>
+<script>
+const form=document.getElementById('registrationForm');
+const confirmationDialog=document.getElementById('confirmationDialog');
+const helpDialog=document.getElementById('helpDialog');
+const status=document.getElementById('status');
+const validationMessage=document.getElementById('validationMessage');
+
+form.addEventListener('submit',event=>{
+  event.preventDefault();
+  validationMessage.hidden=true;
+  validationMessage.textContent='';
+
+  // Give the user clear feedback when required fields or native constraints fail.
+  if(!form.checkValidity()){
+    const firstInvalidField=form.querySelector(':invalid');
+    validationMessage.textContent='Please complete all required fields and correct any invalid values before submitting.';
+    validationMessage.hidden=false;
+    form.reportValidity(); // Also displays the browser's field-specific validation message.
+    if(firstInvalidField) firstInvalidField.focus();
+    return;
+  }
+
+  const email=document.getElementById('email').value.trim();
+  const confirmEmail=document.getElementById('confirmEmail').value.trim();
+  if(email!==confirmEmail){
+    const field=document.getElementById('confirmEmail');
+    field.setCustomValidity('Email addresses do not match.');
+    field.reportValidity();
+    field.setCustomValidity('');
+    validationMessage.textContent='The email addresses do not match. Please check both email fields.';
+    validationMessage.hidden=false;
+    field.focus();
+    return;
+  }
+
+  const firstName=document.getElementById('firstName').value.trim();
+  document.getElementById('dialogMessage').textContent=`Thank you, ${firstName}! Your demo registration for ${email} has been received.`;
+  status.textContent='Form submitted successfully (demo).';
+  confirmationDialog.showModal();
+});
+
+let resetMessageTimer;
+form.addEventListener('reset',()=>{
+  validationMessage.hidden=true;
+  validationMessage.textContent='';
+  status.textContent='The form has been reset. All fields are cleared.';
+
+  // Remove the confirmation after 3 seconds so it does not remain forever.
+  clearTimeout(resetMessageTimer);
+  resetMessageTimer=setTimeout(()=>{
+    status.textContent='';
+  },3000);
+});
+
+document.getElementById('closeDialog').addEventListener('click',()=>confirmationDialog.close());
+document.getElementById('helpLink').addEventListener('click',event=>{event.preventDefault();helpDialog.showModal();});
+document.getElementById('closeHelp').addEventListener('click',()=>helpDialog.close());
+</script>
+</body></html>
